@@ -63,7 +63,7 @@ flutter:
   assets:
       - assets/main_image.png
       - assets/small image.png
-      
+      - assets/face.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

@@ -1,4 +1,9 @@
+import 'dart:ffi';
+import 'dart:ui';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -31,6 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   bool isExpanded = false;
   bool showAllItems = false;
+  bool isFollowing = false;
   final String fullText =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset';
 
@@ -301,7 +307,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: const Row(
           children: [
-            Icon(Icons.exit_to_app_outlined, size: 25),
+            Icon(Icons.exit_to_app_outlined, size: 25,color: Colors.red,),
             SizedBox(width: 15),
             Text(
               'Exit community',
@@ -321,7 +327,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
         child: const Row(
           children: [
-            Icon(Icons.thumb_down_outlined, size: 25),
+            Icon(Icons.thumb_down_outlined, size: 25,color: Colors.red,),
             SizedBox(width: 15),
             Text(
               'Report',
@@ -336,17 +342,44 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     ],
   ),
-),
-
-            ],
+          ),
+          const SizedBox(height: 10,),
+           //members
+          const Padding(
+          padding: EdgeInsets.only(top: 10, left: 25, right: 25),
             
-          
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+               children: [
+                 Text('Members',style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                 ),),
+                 Icon(Icons.search,size: 27,),
+               ],
+             ),
+          ),
+           const SizedBox(height: 10,)
+           ,
+
+ Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25),
+                child: SizedBox(
+                  height: 400, // Set a fixed height for the list
+                  child: ListView.builder(
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return MemberItem();
+                    },
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
-
   String _getShortText(String text) {
     List<String> words = text.split(' ');
     if (words.length <= 45) {
@@ -431,6 +464,76 @@ class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MemberItem extends StatefulWidget {
+  @override
+  _MemberItemState createState() => _MemberItemState();
+}
+
+class _MemberItemState extends State<MemberItem> {
+  bool isFollowing = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 13, top: 13),
+      child: Row(
+        children: [
+          const CircleAvatar(
+            radius: 20,
+            backgroundImage: AssetImage('assets/face.png'),
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: const [
+              Text(
+                'Yashika ',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                '29, India ',
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+          const Spacer(),
+          SizedBox(width: 125,
+            child: ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  isFollowing = !isFollowing;
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                
+                
+                backgroundColor: isFollowing ? Colors.grey : Colors.red, // Button color
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50), // Rounded corners
+                ),
+              ),
+              child: Text(
+                isFollowing ? 'Following' : 'Add',
+                style: const TextStyle(
+                  color: Colors.white, // Text color
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
