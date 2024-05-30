@@ -34,6 +34,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final ScrollController _scrollController = ScrollController();
+  bool _isScrolledToTop = true;
   bool isExpanded = false;
   bool showAllItems = false;
   bool isFollowing = false;
@@ -41,49 +43,72 @@ class _MyHomePageState extends State<MyHomePage> {
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset';
 
   @override
-  Widget build(BuildContext context) {
-    final List<String> items = List<String>.generate(5, (index) => 'Outdoor');
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      setState(() {
+        _isScrolledToTop = _scrollController.offset <= 0;
+      });
+    });
+  }
 
+  final List<String> items = List<String>.generate(5, (index) => 'Outdoor');
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-       
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              floating: true,
+              expandedHeight: 250,
+              backgroundColor: _isScrolledToTop ? Color.fromARGB(255, 230, 44, 31) : Color.fromARGB(255, 230, 44, 31),
+
+              flexibleSpace: FlexibleSpaceBar(
+              titlePadding: EdgeInsets.all(8), // Remove titlePadding
+        title: Container(
+      alignment: Alignment.bottomLeft,
+      child: const Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset(
-                'assets/main_image.png',
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
-            AppBar(
-                toolbarHeight: 70,
-                backgroundColor: Color.fromARGB(255, 220, 26, 12),
-                title: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('THE WEEKEND', style: TextStyle(fontSize: 20,color: Colors.white)),
-                    SizedBox(height: 8,),
-                    Text('Community. +11K Members', style: TextStyle(fontSize: 14,color: Colors.white)),
-                  ],
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      // Handle share action
-                    },
-                    icon: const Icon(Icons.share,color: Colors.white,),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Handle settings action
-                    },
-                    icon: const Icon(Icons.more_vert,color: Colors.white,),
-                  ),
-                ],
-              ),
-             
-              const SizedBox(height: 10), // Space between row and text
+              Text('THE WEEKEND', style: TextStyle(color: Colors.white, fontSize: 14)),
+              Text('Community. +11K Members', style: TextStyle(color: Colors.white, fontSize: 12)),
+            ],
+          ),
+          Row(
+            children: [
+              Icon(Icons.share_outlined, color: Colors.white, size: 22),
+              SizedBox(width: 10),
+              Icon(Icons.more_vert, color: Colors.white, size: 22),
+            ],
+          ),
+        ],
+      ),
+    ),
+    background: Image.asset('assets/main_image.png', fit:BoxFit.cover),
+
+
+  ),
+            ),
+
+
+
+
+
+
+
+      SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const SizedBox(height: 10), // Space between row and text
           
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
@@ -120,7 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 10,),
+
+const SizedBox(height: 10,),
               Padding(
                 padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
                 child: Column(
@@ -348,33 +374,48 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-        ),
-      ),
+
+
+
+
+
+
+
+
+
+              
+
+
+
+          ),
+        ],
+      ),),
     );
   }
-  String _getShortText(String text) {
-    List<String> words = text.split(' ');
-    if (words.length <= 45) {
-      return text;
-    } else {
-      return words.take(45).join(' ') + '...';
-    }
-  }
+}
 
-  Widget _buildItem(String text) {
-    return Container(
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.red),
-        borderRadius: BorderRadius.circular(50),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.red),
 
-      ),
-    );
+String _getShortText(String text) {
+  List<String> words = text.split(' ');
+  if (words.length <= 45) {
+    return text;
+  } else {
+    return words.take(45).join(' ') + '...';
   }
+}
+
+Widget _buildItem(String text) {
+  return Container(
+    padding: const EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      border: Border.all(color: Colors.red),
+      borderRadius: BorderRadius.circular(50),
+    ),
+    child: Text(
+      text,
+      style: const TextStyle(color: Colors.red),
+    ),
+  );
 }
 
 class MuteNotificationToggle extends StatefulWidget {
@@ -396,7 +437,6 @@ class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
   @override
   Widget build(BuildContext context) {
     return Row(
-
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
@@ -413,7 +453,7 @@ class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
             height: 25,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15),
-              color: isMuted ? const Color.fromARGB(255, 237, 83, 72): const Color.fromARGB(255, 212, 212, 212),
+              color: isMuted ? const Color.fromARGB(255, 237, 83, 72) : const Color.fromARGB(255, 212, 212, 212),
             ),
             child: Stack(
               children: [
@@ -423,7 +463,7 @@ class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
                   left: isMuted ? 30 : 0,
                   right: isMuted ? 0 : 30,
                   child: Container(
-                    width:30,
+                    width: 30,
                     height: 25,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
@@ -441,6 +481,8 @@ class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
 }
 
 class MemberItem extends StatefulWidget {
+  const MemberItem({super.key});
+
   @override
   _MemberItemState createState() => _MemberItemState();
 }
@@ -479,7 +521,8 @@ class _MemberItemState extends State<MemberItem> {
             ],
           ),
           const Spacer(),
-          SizedBox(width: 125,
+          SizedBox(
+            width: 125,
             child: ElevatedButton(
               onPressed: () {
                 setState(() {
@@ -487,8 +530,6 @@ class _MemberItemState extends State<MemberItem> {
                 });
               },
               style: ElevatedButton.styleFrom(
-                
-                
                 backgroundColor: isFollowing ? Colors.grey : Colors.red, // Button color
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50), // Rounded corners
