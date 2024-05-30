@@ -30,7 +30,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isExpanded = false;
-  bool showAllItems= false;
+  bool showAllItems = false;
   final String fullText =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset';
 
@@ -118,7 +118,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   textAlign: TextAlign.left,
                   text: TextSpan(
                     children: [
-                     TextSpan(
+                      TextSpan(
                         text: isExpanded ? fullText : _getShortText(fullText),
                         style: GoogleFonts.openSans(
                           textStyle: const TextStyle(
@@ -181,7 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 children: [
                   Text(
                     'Media , docs and links',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(fontWeight: FontWeight.bold,
+                    fontSize: 16),
                   ),
                   Icon(
                     Icons.keyboard_arrow_right_sharp,
@@ -242,24 +243,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
             ),
-          //MUTE NOTIFICATION
-          const Padding(
-            padding:  EdgeInsets.only(top: 10, left: 25, right: 25),
-            child:  Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('Mute notification ',style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),),
-                Icon(Icons.toggle_off,size: 50,color: Colors.grey,)
-              ],
+            // MUTE NOTIFICATION
+            const Padding(
+              padding: EdgeInsets.only(top: 10, left: 25, right: 25),
+              child: MuteNotificationToggle(),
             ),
-          ),
-          
           ],
-        
-        
-
         ),
       ),
     );
@@ -285,6 +274,68 @@ class _MyHomePageState extends State<MyHomePage> {
         text,
         style: const TextStyle(color: Colors.red),
       ),
+    );
+  }
+}
+
+class MuteNotificationToggle extends StatefulWidget {
+  const MuteNotificationToggle({super.key});
+
+  @override
+  _MuteNotificationToggleState createState() => _MuteNotificationToggleState();
+}
+
+class _MuteNotificationToggleState extends State<MuteNotificationToggle> {
+  bool isMuted = false;
+
+  void _toggleMute() {
+    setState(() {
+      isMuted = !isMuted;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          'Mute notification',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+        GestureDetector(
+          onTap: _toggleMute,
+          child: Container(
+            width: 45,
+            height: 25,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              color: isMuted ? Colors.green : Colors.grey,
+            ),
+            child: Stack(
+              children: [
+                AnimatedPositioned(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.easeInOut,
+                  left: isMuted ? 30 : 0,
+                  right: isMuted ? 0 : 30,
+                  child: Container(
+                    width:30,
+                    height: 25,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
