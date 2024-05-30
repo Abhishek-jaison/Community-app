@@ -1,4 +1,4 @@
-# music_app
+# Commmunity app
 
 A new Flutter project.
 
