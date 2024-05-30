@@ -45,72 +45,44 @@ class _MyHomePageState extends State<MyHomePage> {
     final List<String> items = List<String>.generate(5, (index) => 'Outdoor');
 
     return Scaffold(
+       
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Image.asset(
                 'assets/main_image.png',
                 width: double.infinity,
                 fit: BoxFit.cover,
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      padding: const EdgeInsets.all(10),
-                      color: const Color.fromARGB(255, 195, 36, 34),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'THE WEEKEND',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                            ),
-                          ),
-                          Text(
-                            'Community. +11K Members',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+            AppBar(
+                toolbarHeight: 70,
+                backgroundColor: Color.fromARGB(255, 220, 26, 12),
+                title: const Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('THE WEEKEND', style: TextStyle(fontSize: 20,color: Colors.white)),
+                    SizedBox(height: 8,),
+                    Text('Community. +11K Members', style: TextStyle(fontSize: 14,color: Colors.white)),
+                  ],
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {
+                      // Handle share action
+                    },
+                    icon: const Icon(Icons.share,color: Colors.white,),
                   ),
-                  Container(
-                    padding: const EdgeInsets.only(
-                        top: 14.5, bottom: 14.5, left: 2, right: 10),
-                    color: const Color.fromARGB(255, 195, 36, 34),
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.white,
-                          width: 1,
-                        ),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          // TODO: Perform action when the button is pressed
-                        },
-                        icon: const Icon(Icons.share_sharp),
-                        focusColor: Colors.red,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 20,
-                    color: const Color.fromARGB(255, 195, 36, 34),
-                    height: 69,
+                  IconButton(
+                    onPressed: () {
+                      // Handle settings action
+                    },
+                    icon: const Icon(Icons.more_vert,color: Colors.white,),
                   ),
                 ],
               ),
+             
               const SizedBox(height: 10), // Space between row and text
           
               Padding(
