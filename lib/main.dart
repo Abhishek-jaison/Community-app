@@ -3,8 +3,10 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:music_app/splashscreen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         textTheme: GoogleFonts.openSansTextTheme(),
       ),
-      home: const MyHomePage(),
+      home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
@@ -45,6 +47,9 @@ class _MyHomePageState extends State<MyHomePage> {
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset';
 TextEditingController _searchController = TextEditingController();
 
+
+
+
   void _toggleSearch() {
     setState(() {
       _isSearching = !_isSearching;
@@ -62,48 +67,56 @@ TextEditingController _searchController = TextEditingController();
 
   final List<String> items = List<String>.generate(5, (index) => 'Outdoor');
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              expandedHeight: 250,
-              backgroundColor: _isScrolledToTop ? Color.fromARGB(255, 230, 44, 31) : Color.fromARGB(255, 230, 44, 31),
-
-              flexibleSpace: FlexibleSpaceBar(
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: SafeArea(
+      child: CustomScrollView(
+        controller: _scrollController,
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            floating: true,
+            expandedHeight: 300,
+            backgroundColor: _isScrolledToTop ? Color.fromARGB(255, 230, 44, 31) : Color.fromARGB(255, 230, 44, 31),
+            flexibleSpace: FlexibleSpaceBar(
               titlePadding: EdgeInsets.all(8), // Remove titlePadding
-        title: Container(
-      alignment: Alignment.bottomLeft,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('THE WEEKEND', style: TextStyle(color: Colors.white, fontSize: 14)),
-              Text('Community. +11K Members', style: TextStyle(color: Colors.white, fontSize: 12)),
-            ],
-          ),
-          Row(
-            children: [
-              Icon(Icons.share_outlined, color: Colors.white, size: 22),
-              SizedBox(width: 10),
-              Icon(Icons.more_vert, color: Colors.white, size: 22),
-            ],
-          ),
-        ],
-      ),
-    ),
-    background: Image.asset('assets/main_image.png', fit:BoxFit.cover),
-
-
+              title: Container(
+                alignment: Alignment.bottomLeft,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('THE WEEKEND', style: TextStyle(color: Colors.white, fontSize: 14)),
+                        Text('Community. +11K Members', style: TextStyle(color: Colors.white, fontSize: 12)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            // Handle share icon tap
+                          },
+                          child: Icon(Icons.share_outlined, color: Colors.white, size: 22),
+                        ),
+                        SizedBox(width: 10),
+                        GestureDetector(
+                          onTap: () {
+                            // Open bottom sheet
+                            _displayBottomSheet(context);
+                          },
+                          child: Icon(Icons.more_vert, color: Colors.white, size: 22),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              background: Image.asset('assets/main_image.png', fit:BoxFit.cover),
   ),
             ),
 
@@ -373,20 +386,23 @@ const SizedBox(height: 10,),
           ),
            const SizedBox(height: 10,)
            ,if (_isSearching)
-            Positioned(
-              top: 10.0,
-              left: 10.0,
-              right: 10.0,
-              child: Card(
-                child: Padding(
-                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search...',
-                      border: InputBorder.none,
+            Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+              child: Positioned(
+                top: 10.0,
+                left: 10.0,
+                right: 10.0,
+                child: Card(
+                  child: Padding(
+                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                    child: TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: 'Search...',
+                        border: InputBorder.none,
+                      ),
+                      autofocus: true,
                     ),
-                    autofocus: true,
                   ),
                 ),
               ),
@@ -580,4 +596,88 @@ class _MemberItemState extends State<MemberItem> {
       ),
     );
   }
+
+
+
+
+}
+
+
+Future<void> _displayBottomSheet(BuildContext context) {
+  return showModalBottomSheet(
+    barrierColor: Colors.black.withOpacity(0.5),
+    context: context,
+    builder: (context) => Container(
+      height: 120,
+      child: Padding(
+        padding: EdgeInsets.only(top: 10, left: 20, right: 10, bottom: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            GestureDetector(
+              onTap: () {
+                print('invite pressed');
+                // Handle click for the 'Invite' option
+                // Add your logic here
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.link),
+                  SizedBox(width: 20),
+                  Text(
+                    'Invite',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Handle click for the 'Add Member' option
+                // Add your logic here
+              },
+              child: const Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.person_add_alt_outlined),
+                  SizedBox(width: 20),
+                  Text(
+                    'Add Member',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Handle click for the 'Add Group' option
+                // Add your logic here
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Icon(Icons.group_add_outlined),
+                  SizedBox(width: 20),
+                  Text(
+                    'Add Group',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+  );
 }
