@@ -364,49 +364,56 @@ const SizedBox(height: 10,),
           ),
           const SizedBox(height: 10,),
            //members
-           Padding(
-          padding: EdgeInsets.only(top: 10, left: 25, right: 25),
-            
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               children: [
-                 Text('Members',style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                 ),),
-                    IconButton(
-                    icon: Icon(Icons.search, color: Colors.black),
-                    onPressed: () {
-                          _toggleSearch();
-                   },
-                 ), 
-                 
-               ],
-             ),
+          Padding(
+  padding: EdgeInsets.only(top: 10, left: 25, right: 25),
+  child: Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Members',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-           const SizedBox(height: 10,)
-           ,if (_isSearching)
-            Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-              child: Positioned(
+          IconButton(
+            icon: Icon(Icons.search, color: Colors.black),
+            onPressed: () {
+              _toggleSearch();
+            },
+          ),
+        ],
+      ),
+      const SizedBox(height: 10),
+      if (_isSearching)
+        Container(
+          height: 50, // Set a specific height or other constraints
+          child: Stack(
+            children: [
+              Positioned(
                 top: 10.0,
                 left: 10.0,
                 right: 10.0,
                 child: Card(
-                  child: Padding(
-                  padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'Search...',
-                        border: InputBorder.none,
-                      ),
-                      autofocus: true,
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.all(10), // Adjust padding as needed
                     ),
+                    autofocus: true,
                   ),
                 ),
               ),
-            ),
+            ],
+          ),
+        ),
+    ],
+  ),
+),
  Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: SizedBox(
