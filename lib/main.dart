@@ -37,11 +37,19 @@ class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _scrollController = ScrollController();
   bool _isScrolledToTop = true;
   bool isExpanded = false;
+  bool _isSearching = false;
+
   bool showAllItems = false;
   bool isFollowing = false;
   final String fullText =
       'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset';
+TextEditingController _searchController = TextEditingController();
 
+  void _toggleSearch() {
+    setState(() {
+      _isSearching = !_isSearching;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -343,7 +351,7 @@ const SizedBox(height: 10,),
           ),
           const SizedBox(height: 10,),
            //members
-          const Padding(
+           Padding(
           padding: EdgeInsets.only(top: 10, left: 25, right: 25),
             
             child: Row(
@@ -353,13 +361,36 @@ const SizedBox(height: 10,),
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                  ),),
-                 Icon(Icons.search,size: 27,),
+                    IconButton(
+                    icon: Icon(Icons.search, color: Colors.black),
+                    onPressed: () {
+                          _toggleSearch();
+                   },
+                 ), 
+                 
                ],
              ),
           ),
            const SizedBox(height: 10,)
-           ,
-
+           ,if (_isSearching)
+            Positioned(
+              top: 10.0,
+              left: 10.0,
+              right: 10.0,
+              child: Card(
+                child: Padding(
+                padding: const EdgeInsets.only(top: 10, left: 25, right: 25),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      border: InputBorder.none,
+                    ),
+                    autofocus: true,
+                  ),
+                ),
+              ),
+            ),
  Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: SizedBox(
